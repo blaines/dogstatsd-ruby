@@ -3,6 +3,7 @@ require_relative 'helper'
 require 'allocation_stats' if RUBY_VERSION >= "2.3.0"
 require 'socket'
 require 'stringio'
+require_relative '../lib/datadog/safe_statsd'
 
 SingleCov.covered! file: 'lib/datadog/statsd.rb' if RUBY_VERSION > "2.0"
 
@@ -16,7 +17,7 @@ describe Datadog::Statsd do
   let(:socket) { FakeUDPSocket.new }
 
   before do
-    @statsd = Datadog::Statsd.new('localhost', 1234, namespace: namespace)
+    @statsd = Datadog::SafeStatsd.new('localhost', 1234, namespace: namespace)
     @statsd.connection.instance_variable_set(:@socket, socket)
   end
 
